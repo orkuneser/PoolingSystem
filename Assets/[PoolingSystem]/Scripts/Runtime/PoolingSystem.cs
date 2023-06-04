@@ -3,16 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PoolingSystem : MonoBehaviour
+public class PoolingSystem : Singleton<PoolingSystem>
 {
-    #region SINGLETON
-    public static PoolingSystem Instance;
-    private void Awake()
-    {
-        Instance = this;
-    }
-    #endregion
-
     [SerializeField] private List<Pool> _pools = new List<Pool>();
     [SerializeField] private int _defaultSize = 10;
 
@@ -43,11 +35,11 @@ public class PoolingSystem : MonoBehaviour
         }
     }
 
-    public GameObject InstantiatePoolObject(string ID)
+    public GameObject InstantiatePoolObject(string poolID)
     {
         for (int i = 0; i < _pools.Count; i++)
         {
-            if (string.Equals(_pools[i].PoolID, ID))
+            if (string.Equals(_pools[i].PoolID, poolID))
             {
                 for (int j = 0; j < _pools[i].cloneObjects.Count; j++)
                 {
@@ -59,8 +51,6 @@ public class PoolingSystem : MonoBehaviour
                     }
                 }
             }
-            else
-                Debug.LogError("Pool with ID " + ID + " dosen't exist.");
         }
         return null;
     }
